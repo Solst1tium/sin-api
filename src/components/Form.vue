@@ -5,14 +5,14 @@
     <v-text-field v-model="nuevaHora.rut" :counter="10" :rules="rutRules" label="Rut" required></v-text-field>
 
     <v-text-field v-model="nuevaHora.email" :rules="emailRules" label="E-mail" required></v-text-field>
-    <v-select v-model="nuevaHora.especialidad" @change="funcion1"
+    <v-select v-model="nuevaHora.especialidad"
       :items="items"
       :rules="[v => !!v || 'Item is required']"
       label="Especialidad"
       required>
     </v-select>
 
-     <v-select v-model="nuevaHora.doctor" :items="doctores" item-text="nameD"
+     <v-select v-model="nuevaHora.doctor"  @change="display(nuevaHora.doctor)" :items="doctores" item-text="nameD"
      return-object item-value="value" label="Selecciona un doctor"></v-select> 
 
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="agregarHora">
@@ -27,17 +27,21 @@
       Reset Validation
     </v-btn>
   </v-form>
+  <detalles-component @cerrar_dialog = 'dialog = false' :dialog = 'dialog'  :doctor = 'selectedDr'> </detalles-component>
 
   </div>
 </template>
 <script>
+import DetallesComponent from '@/components/Detalles.vue'
 import {mapActions, mapState} from 'vuex' 
+
   export default {
     data: () => ({
-      valid: true,     
-      selectedDr: null,
+      valid: true,
+      dialog: false,     
+      selectedDr: {nameD: 'Cristian', value: 1, default: true},
       nuevaHora: {name: '',
-       rut: '',
+        rut: '',
         email: '', 
         especialidad:'', 
         doctor: ''
@@ -62,29 +66,33 @@ import {mapActions, mapState} from 'vuex'
         'Pediatría',
       ],    
     }),
+    components: {
+      DetallesComponent
+    },
     methods: {
       ...mapActions(['selectedDoctor', 'agendarHora']),
 
       validate () {
         this.$refs.form.validate()
       },
-      funcion1: function(nuevaHora){
-         this.$emit('nueva_hora', nuevaHora.especialidad)    
-      },
       reset () {
         this.$refs.form.reset()
       },
       resetValidation () {
         this.$refs.form.resetValidation()
-      },
-      
+      },      
       agregarHora(){
         this.validate()
         this.agendarHora(this.nuevaHora)
           console.log(this.nuevaHora)    
           this.nuevaHora = {name:'', rut:'', especialidad:'', doctor:''}
           this.reset()         
-      }
+      },
+       display(dato){         
+          this.dialog = true
+          this.selectedDr = dato
+          console.log("aers", this.selectedDr)
+        }
     },
     computed: {
       ...mapState(['doctores', 'selectedItemDr', 'todasHoras']) 

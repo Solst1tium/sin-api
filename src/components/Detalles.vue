@@ -1,44 +1,34 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
-    <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
-    <v-card-title>
-      {{nuevaHora.doctor.name}}
-    </v-card-title>
-
-    <v-card-subtitle>
-      1,000 miles of wonder
-    </v-card-subtitle>
-
-    <v-card-actions>
-      <v-btn color="orange lighten-2" text>
-        Explore
-      </v-btn>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon @click="show = !show">
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-      </v-btn>
-    </v-card-actions>
-
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
-        <v-card-text>
-          I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-        </v-card-text>
-      </div>
-    </v-expand-transition>
-  </v-card>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" persistent max-width="290">     
+      <v-card>
+        <v-card-title class="headline">
+         {{doctor.nameD}}
+        </v-card-title>
+        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="close_modal">
+            Cerrar
+          </v-btn>      
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 <script>
   export default {
     props: {
-    dialog: Boolean,
-    nuevaHora: Object
+    dialog: Boolean,    
+    doctor: Object
     },
     data: () => ({
-      show: false,
+      
     }),
+    methods: {
+      close_modal(){
+      this.$emit('cerrar_dialog')
+       }
+    },
   }
 </script>
